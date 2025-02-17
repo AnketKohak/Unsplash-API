@@ -25,11 +25,11 @@ struct FavouriteScreen: View{
                     } placeholder: {
                         VStack {
                             Spacer()
-                            ProgressView("Loading...") // Fixed the typo
-                                .font(.largeTitle) // Works fine here
+                            ProgressView("Loading...")
+                                .font(.largeTitle)
                             Spacer()
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures full centering
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                 }
                 

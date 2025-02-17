@@ -17,7 +17,7 @@ struct ContentView: View {
             List(filteredResults, id: \.id) { result in
                 VStack {
                     ImageSection(result: result)
-                        .contentShape(Rectangle()) // Prevents tap conflicts
+                        .contentShape(Rectangle())
                     
                     Spacer()
                     
@@ -39,10 +39,11 @@ struct ContentView: View {
                 searchObjectContoller.search()
             }
             .navigationTitle("Unsplash API")
+            
         }
     }
     
-    // Filter results based on search text
+   
     private var filteredResults: [Result] {
         if searchText.isEmpty {
             return searchObjectContoller.results
@@ -72,7 +73,7 @@ struct ImageSection: View {
                 }
             }
         }
-        .buttonStyle(PlainButtonStyle()) // Prevents extra button styling that causes conflicts
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -90,7 +91,7 @@ struct FavouriteButton: View {
                 .padding()
                 .background(Circle().fill(Color.white.opacity(0.7)))
         }
-        .buttonStyle(PlainButtonStyle()) // Prevents unwanted button styling effects
+        .buttonStyle(PlainButtonStyle())
     }
 
     private var isFavourite: Bool {
