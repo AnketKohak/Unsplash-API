@@ -14,10 +14,13 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(searchObjectContoller.results, id: \.id) { result in
+            List(filteredResults, id: \.id) { result in
                 VStack {
                     ImageSection(result: result)
+                        .contentShape(Rectangle()) // Prevents tap conflicts
+                    
                     Spacer()
+                    
                     FavouriteButton(result: result, favourite: $favourite)
                 }
             }
@@ -30,11 +33,23 @@ struct ContentView: View {
                 }
             }
             .searchable(text: $searchText)
+            .navigationBarTitleDisplayMode(.inline)
             .listStyle(.plain)
             .onAppear {
                 searchObjectContoller.search()
             }
             .navigationTitle("Unsplash API")
+        }
+    }
+    
+    // Filter results based on search text
+    private var filteredResults: [Result] {
+        if searchText.isEmpty {
+            return searchObjectContoller.results
+        } else {
+            return searchObjectContoller.results.filter { result in
+                result.description?.lowercased().contains(searchText.lowercased()) ?? false
+            }
         }
     }
 }
@@ -57,6 +72,7 @@ struct ImageSection: View {
                 }
             }
         }
+        .buttonStyle(PlainButtonStyle()) // Prevents extra button styling that causes conflicts
     }
 }
 
@@ -74,6 +90,7 @@ struct FavouriteButton: View {
                 .padding()
                 .background(Circle().fill(Color.white.opacity(0.7)))
         }
+        .buttonStyle(PlainButtonStyle()) // Prevents unwanted button styling effects
     }
 
     private var isFavourite: Bool {
