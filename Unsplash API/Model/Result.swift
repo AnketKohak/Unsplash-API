@@ -18,5 +18,5 @@ struct Result:Codable{
 }
 
 struct URLs:Codable{
-    let small:String
+    let small:String?
 }

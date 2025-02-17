@@ -13,7 +13,7 @@ class SearchObjectController: ObservableObject{
     @Published var searchText: String = "flower"
     var token = "knLgWPCE0eOYLvyzoFKj0WriP5AdVWoUVcC7xXhwauA"
     func search(){
-        let url = URL(string: "https://api.unsplash.com/search/photos?query=\(searchText)")
+        let url = URL(string: "https://api.unsplash.com/search/photos?query=\(searchText)&per_page=30&orientation=landscape")
         
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
@@ -23,7 +23,9 @@ class SearchObjectController: ObservableObject{
             guard let data = data else { return}
             do {
                 let res = try JSONDecoder().decode(Results.self, from: data)
-                self.results.append(contentsOf: res.results)
+                DispatchQueue.main.async {
+                    self.results.append(contentsOf: res.results)
+                }
             }catch{
                 print(error)
             }
