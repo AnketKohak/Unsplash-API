@@ -15,6 +15,7 @@ struct Result:Codable{
     let id:String
     let description:String?
     let urls: URLs
+    let likes:Int?
 }
 
 struct URLs:Codable{

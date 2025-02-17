@@ -16,19 +16,35 @@ struct DetailScreen: View{
                 AsyncImage(url: url) { image in
                     image.resizable()
                         .scaledToFit()
-                        .aspectRatio(2/3, contentMode: .fill)
+                        .aspectRatio(3/2, contentMode: .fit)
                         .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                } placeholder: {
+                        .overlay (
+                            HStack{
+                                Image(systemName: "heart.fill")
+                                    .foregroundStyle(.red)
+                                    .font(.largeTitle)
+                                
+                                Text("\(result.likes ?? 0)")
+                                    .font(.largeTitle)
+                                
+                                
+                            }.padding(10),
+                            alignment: .bottomTrailing
+                        ) }placeholder: {
                     VStack {
                         Spacer()
-                        ProgressView("Loading...") // Fixed the typo
-                            .font(.largeTitle) // Works fine here
+                        ProgressView("Loading...")
+                            .font(.largeTitle)
                         Spacer()
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures full centering
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            
             Text(result.description ?? "")
+                .font(.title2)
+            Spacer()
+            
         }.padding()
     }
 }
