@@ -1,9 +1,3 @@
-//
-//  ContentView.swift
-//  Unsplash API
-//
-//  Created by Anket Kohak on 17/02/25.
-//
 import SwiftUI
 
 struct ContentView: View {
