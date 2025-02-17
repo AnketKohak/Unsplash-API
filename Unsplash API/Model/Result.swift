@@ -19,4 +19,5 @@ struct Result:Codable{
 
 struct URLs:Codable{
     let small:String?
+    let medium:String?
 }

@@ -4,67 +4,91 @@
 //
 //  Created by Anket Kohak on 17/02/25.
 //
-
 import SwiftUI
 
 struct ContentView: View {
+    
     @ObservedObject var searchObjectContoller = SearchObjectController()
+    @State var favourite: [Result] = []
+    @State private var searchText: String = ""
+    
     var body: some View {
-        List(searchObjectContoller.results , id: \.id ){ result in
-            NavigationLink {
-                DetailScreen(result: result)
-            } label: {
-                if let urlImage = result.urls.small{
-                    let url = URL(string: urlImage)
-                    AsyncImage(url: url) { image in
-                        image.resizable()
-                            .scaledToFit()
-                            .aspectRatio(2/3, contentMode: .fill)
-                            .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                    } placeholder: {
-                        VStack {
-                            Spacer()
-                            ProgressView() // Fixed the typo
-                                .scaleEffect(2)
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures full centering
+        NavigationView {
+            List(searchObjectContoller.results, id: \.id) { result in
+                VStack {
+                    ImageSection(result: result)
+                    Spacer()
+                    FavouriteButton(result: result, favourite: $favourite)
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: FavouriteScreen(result: favourite)) {
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.red)
                     }
                 }
             }
-        }.listStyle(.plain)
-            .onAppear(){
+            .searchable(text: $searchText)
+            .listStyle(.plain)
+            .onAppear {
                 searchObjectContoller.search()
             }
+            .navigationTitle("Unsplash API")
+        }
+    }
+}
+
+struct ImageSection: View {
+    let result: Result
+
+    var body: some View {
+        NavigationLink(destination: DetailScreen(result: result)) {
+            if let urlString = result.urls.small, let url = URL(string: urlString) {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                        .scaledToFit()
+                        .aspectRatio(2/3, contentMode: .fill)
+                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                } placeholder: {
+                    ProgressView()
+                        .scaleEffect(2)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+        }
+    }
+}
+
+struct FavouriteButton: View {
+    let result: Result
+    @Binding var favourite: [Result]
+
+    var body: some View {
+        Button {
+            toggleFavourite()
+        } label: {
+            Image(systemName: isFavourite ? "heart.fill" : "heart")
+                .font(.title)
+                .foregroundColor(.red)
+                .padding()
+                .background(Circle().fill(Color.white.opacity(0.7)))
+        }
+    }
+
+    private var isFavourite: Bool {
+        favourite.contains { $0.id == result.id }
+    }
+
+    private func toggleFavourite() {
+        if let index = favourite.firstIndex(where: { $0.id == result.id }) {
+            favourite.remove(at: index)
+        } else {
+            favourite.append(result)
+        }
     }
 }
 
 #Preview {
     ContentView()
-}
-
-struct DetailScreen: View{
-    let result: Result
-    var body: some View{
-        VStack{
-            if let urlImage = result.urls.small{
-                let url = URL(string: urlImage)
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                        .scaledToFit()
-                        .aspectRatio(2/3, contentMode: .fill)
-                        .clipShape(RoundedRectangle(cornerRadius: 15.0))
-                } placeholder: {
-                    VStack {
-                        Spacer()
-                        ProgressView("Loading...") // Fixed the typo
-                            .font(.largeTitle) // Works fine here
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures full centering
-                }
-            }
-            Text(result.description ?? "")
-        }
-    }
 }
