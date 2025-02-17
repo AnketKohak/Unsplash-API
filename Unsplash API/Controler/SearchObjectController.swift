@@ -9,8 +9,6 @@ import Foundation
 
 
 class SearchObjectController: ObservableObject{
-    static let shared = SearchObjectController()
-    private init(){}
     @Published var results = [Result]()
     @Published var searchText: String = "flower"
     var token = "knLgWPCE0eOYLvyzoFKj0WriP5AdVWoUVcC7xXhwauA"

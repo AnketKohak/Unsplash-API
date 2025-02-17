@@ -8,15 +8,15 @@
 import Foundation
 
 struct Results:Codable{
-    var total: Int
-    var results:[Result]
+    let total: Int
+    let results:[Result]
 }
 struct Result:Codable{
-    var id:String
-    var description:String?
-    var urls: URLs
+    let id:String
+    let description:String?
+    let urls: URLs
 }
 
 struct URLs:Codable{
-    var small:String
+    let small:String
 }
