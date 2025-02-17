@@ -1,9 +1,3 @@
-//
-//  ContentView.swift
-//  Unsplash API
-//
-//  Created by Anket Kohak on 17/02/25.
-//
 import SwiftUI
 
 struct ContentView: View {
@@ -17,7 +11,10 @@ struct ContentView: View {
             List(searchObjectContoller.results, id: \.id) { result in
                 VStack {
                     ImageSection(result: result)
+                        .contentShape(Rectangle()) // Prevents tap conflicts
+                    
                     Spacer()
+                    
                     FavouriteButton(result: result, favourite: $favourite)
                 }
             }
@@ -57,6 +54,7 @@ struct ImageSection: View {
                 }
             }
         }
+        .buttonStyle(PlainButtonStyle()) // Prevents extra button styling that causes conflicts
     }
 }
 
@@ -74,6 +72,7 @@ struct FavouriteButton: View {
                 .padding()
                 .background(Circle().fill(Color.white.opacity(0.7)))
         }
+        .buttonStyle(PlainButtonStyle()) // Prevents unwanted button styling effects
     }
 
     private var isFavourite: Bool {
